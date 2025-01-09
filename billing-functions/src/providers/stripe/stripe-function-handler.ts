@@ -56,6 +56,7 @@ export function stripeFunctionHandler({
                                         planId,
                                         billingEmail,
                                         customerId,
+                                        quantity,
                                     }) {
 
             const customer = await findOrCreateCustomer(stripeClient, {
@@ -84,7 +85,8 @@ export function stripeFunctionHandler({
                     },
                     items: [
                         {
-                            plan: planId || defaultPlanId
+                            plan: planId || defaultPlanId,
+                            quantity: quantity || 1,
                         },
                     ],
                 },

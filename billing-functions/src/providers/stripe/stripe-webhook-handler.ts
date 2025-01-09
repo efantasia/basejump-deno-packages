@@ -5,8 +5,6 @@ import {
 } from "./billing-functions/stripe-utils.ts";
 import {BASEJUMP_BILLING_DATA_UPSERT} from "../../../lib/upsert-data.ts";
 
-const cryptoProvider = Stripe.createSubtleCryptoProvider();
-
 const relevantEvents = new Set([
     "customer.subscription.created",
     "customer.subscription.updated",
@@ -31,9 +29,7 @@ export function stripeWebhookHandler({
         const receivedEvent = await stripeClient.webhooks.constructEventAsync(
             body,
             signature!,
-            stripeWebhookSigningSecret,
-            undefined,
-            cryptoProvider
+            stripeWebhookSigningSecret
         );
 
         if (!relevantEvents.has(receivedEvent.type)) {
