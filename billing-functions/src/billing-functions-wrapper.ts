@@ -97,7 +97,7 @@ export function billingFunctionsWrapper(
         }
         const body = await req.json();
 
-        if (!body.args?.account_id) {
+        if (body.action !== "get_plans" && !body.args?.account_id) {
             return errorResponse("Account id is required");
         }
         try {
@@ -108,6 +108,7 @@ export function billingFunctionsWrapper(
                         headers: {
                             ...corsHeaders,
                             "Content-Type": "application/json",
+                            "Cache-Control": "public, max-age=60",
                         },
                     });
                 case "get_billing_portal_url":
