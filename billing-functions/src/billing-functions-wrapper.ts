@@ -12,15 +12,14 @@ type GET_PLANS_ARGS = {
 };
 
 type GET_PLANS_RESPONSE = Array<{
-    id: string;
-    name: string;
-    description?: string;
-    amount: number;
-    currency: string;
-    interval: "month" | "year" | "one_time";
-    interval_count: 1;
-    trial_period_days?: 30;
     active?: boolean;
+    product_name: string;
+    product_description?: string;
+    currency: string;
+    price: number;
+    unit_label?: string;
+    id: string;
+    interval: "month" | "year" | "one_time";
     metadata?: {
         [key: string]: string;
     };
