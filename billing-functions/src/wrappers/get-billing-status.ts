@@ -31,6 +31,7 @@ export default async function getBillingStatus(
     return {
         subscription_id: billingData?.subscription?.id,
         plan_name: billingData?.subscription?.plan_name,
+        quantity: billingData?.subscription?.quantity,
         subscription_active: ["trialing", "active"].includes(
             billingData?.subscription?.status
         ),
