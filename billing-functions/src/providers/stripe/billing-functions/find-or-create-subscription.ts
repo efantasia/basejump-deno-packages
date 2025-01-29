@@ -13,7 +13,7 @@ export async function findOrCreateSubscription(
     // if we have the subscription ID, we can just return it
     if (subscriptionId) {
         const subscription = await stripeClient.subscriptions.retrieve(
-            subscriptionId
+            subscriptionId, {expand: ["items.data.price.product"]}
         );
         if (subscription) {
             return stripeSubscriptionToBasejumpSubscription(accountId, subscription);
@@ -27,6 +27,7 @@ export async function findOrCreateSubscription(
     //If we don't have it, we can search for the metadata
     const customerSubscriptions = await stripeClient.subscriptions.list({
         customer: customerId,
+        expand: ["data.plan.product"],
     });
 
     if (customerSubscriptions.data.length > 0) {

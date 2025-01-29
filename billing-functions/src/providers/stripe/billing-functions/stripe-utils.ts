@@ -29,6 +29,7 @@ export function stripeSubscriptionToBasejumpSubscription(
     status: subscription.status,
     price_id: subscription.items.data[0].price.id,
     quantity: subscription.items.data[0].quantity,
+    plan_name: subscription.items.data[0].price.product.name || subscription.plan.product.name,
     cancel_at_period_end: subscription.cancel_at_period_end,
     cancel_at: subscription.cancel_at
       ? unixToIso(subscription.cancel_at)
@@ -37,7 +38,7 @@ export function stripeSubscriptionToBasejumpSubscription(
       ? unixToIso(subscription.canceled_at)
       : null,
     current_period_start: new Date(
-      subscription.current_period_start
+      subscription.current_period_start * 1000
     ).toISOString(),
     current_period_end: unixToIso(subscription.current_period_end),
     created: unixToIso(subscription.created),
