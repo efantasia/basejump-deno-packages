@@ -68,9 +68,12 @@ export function stripeWebhookHandler({
                     );
                 }
 
+                const product = await stripeClient.products.retrieve(subscriptionData.plan.product as string);
+
                 const subscription = stripeSubscriptionToBasejumpSubscription(
                     accountId,
-                    subscriptionData
+                    subscriptionData,
+                    product?.name
                 );
 
                 return {

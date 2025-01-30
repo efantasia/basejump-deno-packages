@@ -16,7 +16,8 @@ export async function findOrCreateSubscription(
             subscriptionId, {expand: ["items.data.price.product"]}
         );
         if (subscription) {
-            return stripeSubscriptionToBasejumpSubscription(accountId, subscription);
+            const productName = subscription.items.data[0].price?.product?.name;
+            return stripeSubscriptionToBasejumpSubscription(accountId, subscription, productName);
         }
     }
 
@@ -36,7 +37,8 @@ export async function findOrCreateSubscription(
             (s) => s.metadata?.basejump_account_id === accountId
         );
         if (subscription) {
-            return stripeSubscriptionToBasejumpSubscription(accountId, subscription);
+            const productName = subscription.plan?.product?.name;
+            return stripeSubscriptionToBasejumpSubscription(accountId, subscription, productName);
         }
     }
 
@@ -56,12 +58,13 @@ export async function findOrCreateSubscription(
     const newSubscription = await stripeClient.subscriptions.create({
         customer: customerId,
         items: [{price: defaultPlanId}],
-        expand: ["latest_invoice.payment_intent"],
+        expand: ["latest_invoice.payment_intent", "plan.product"],
         trial_period_days: Number(defaultTrialDays),
         metadata: {
             basejump_account_id: accountId,
         },
     });
+    const productName = newSubscription.plan?.product?.name;
 
-    return stripeSubscriptionToBasejumpSubscription(accountId, newSubscription);
+    return stripeSubscriptionToBasejumpSubscription(accountId, newSubscription, productName);
 }

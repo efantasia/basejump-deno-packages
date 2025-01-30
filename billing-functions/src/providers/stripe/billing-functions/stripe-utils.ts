@@ -19,7 +19,8 @@ export function stripeCustomerToBasejumpCustomer(
 
 export function stripeSubscriptionToBasejumpSubscription(
   accountId: string,
-  subscription: Stripe.Subscription
+  subscription: Stripe.Subscription,
+  productName: string
 ): BASEJUMP_BILLING_DATA_UPSERT["subscription"] {
   return {
     id: subscription.id,
@@ -29,7 +30,7 @@ export function stripeSubscriptionToBasejumpSubscription(
     status: subscription.status,
     price_id: subscription.items.data[0].price.id,
     quantity: subscription.items.data[0].quantity,
-    plan_name: subscription.items.data[0].price.product.name || subscription.plan.product.name,
+    plan_name: productName,
     cancel_at_period_end: subscription.cancel_at_period_end,
     cancel_at: subscription.cancel_at
       ? unixToIso(subscription.cancel_at)
